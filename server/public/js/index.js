@@ -61,56 +61,106 @@
 
 	'use strict';
 
-	// 正则
+	// ES6中的函数
 	{
-	  // 修饰符： i 不区分(ignore)大小写；例如: /abc/i 可以匹配 abc、aBC、Abc  
-	  // g 全局(global)匹配 
-	  // 如果不带g，正则过程中字符串从左到右匹配，找到第一个符合条件的即匹配成功，返回
-	  // 如果带g，则字符串从左到右，找到每个符合条件的都记录下来，知道字符串结尾位置
-	  // 例如: 
-	  // var str = 'aaaaaaaa'
-	  // var reg1 = /a/;  str.match(reg1)  // 结果为：["a", index: 0, input: "aaaaaaaa"]
-	  // var reg2 = /a/g; str.match(reg2)  // 结果为：["a", "a", "a", "a", "a", "a", "a", "a"]
-	  //ES5
-	  // 两个参数，第一个参数必须是字符串，第二个参数表示不区分大小写
-	  var regex = new RegExp('xyz', 'i');
-	  var regex2 = new RegExp(/xyz/i);
+	  // 函数默认值 会被传入值覆盖.有默认值的后面不能再有没有默认值的形参
+	  var test = function test() {
+	    var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+	    var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'world';
 
-	  console.log(regex.test('xyZ123'), regex2.test('xyz123'));
+	    console.log('默认值', x, y);
+	  };
 
-	  // ES6 第二个修饰符会覆盖第一个参数指定的修饰符
-	  var regex3 = new RegExp(/xyz/ig, 'i');
-	  console.log(regex3.flags); //获取正则对象修饰符 i
+	  test();
+	  test('hello', '123');
 	}
 
 	{
-	  // 修饰符 y  y与g都是全局匹配，但是g从上一次匹配的位置继续寻找知道找到匹配的位置，不强调必须是第一个匹配到。y匹配的第一个必须是紧跟着的下一个字符才成功
-	  var s = 'bbb_bb_b';
-	  var a1 = /b+/g;
-	  var a2 = new RegExp('b+', 'y');
-	  console.log(a1.exec(s), a2.exec(s));
-	  console.log(a1.exec(s), a2.exec(s));
-	  console.log(a1.exec(s), a2.exec(s));
-	  // 判断正则对象是否开启了带y的正则模式
-	  console.log(a1.sticky, a2.sticky);
+	  var test2 = function test2(x) {
+	    var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : x;
+
+	    console.log('作用域', x, y);
+	  };
+
+	  var test3 = function test3(c) {
+	    var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : x;
+
+	    console.log('作用域', x, y);
+	  };
+
+	  var x = 'test';
+
+	  test2('kill');
+	  test3('kill');
 	}
 
 	{
-	  //修饰符u，  此修饰符标识能够正确处理大于\uFFFF的Unicode字符。 
-	  // 使用u修饰符，正则表达式能够识别大括号{}表示的Unicode字符，否则无法识别，{61}也会被解读为量词，表示61个u字符。
-	  console.log('u-1', /^\uD83D/.test('\uD83D\uDC2A'));
-	  console.log('u-2', /^(?:\uD83D(?![\uDC00-\uDFFF]))/.test('\uD83D\uDC2A'));
-	  // \u{} 大括号里表示一个Unicode编码
-	  console.log(/\u{61}/.test('a'));
-	  console.log(/a/.test('a'));
-	  // 不加u修饰符时.无法匹配码点大于0xFFFF的Unicode字符 另外.还不能处理换行符、回车符、行分隔符，段分隔符
-	  console.log('\uD842\uDFB7');
-	  var _s = '𠮷';
-	  console.log('u1', /^.$/.test(_s));
-	  console.log('u2', /^(?:[\0-\t\x0B\f\x0E-\u2027\u202A-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])$/.test(_s));
+	  // res参数 ...后面紧跟一个变量。把一系列的参数转成了数组   res参数之后不能再有其他参数了
+	  var test4 = function test4() {
+	    for (var _len = arguments.length, arg = Array(_len), _key = 0; _key < _len; _key++) {
+	      arg[_key] = arguments[_key];
+	    }
 
-	  console.log('test', /𠮷{2}/.test('𠮷𠮷'));
-	  console.log('test', /(?:\uD842\uDFB7){2}/.test('𠮷𠮷'));
+	    var _iteratorNormalCompletion = true;
+	    var _didIteratorError = false;
+	    var _iteratorError = undefined;
+
+	    try {
+	      for (var _iterator = arg[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	        var v = _step.value;
+
+	        console.log('rest', v);
+	      }
+	    } catch (err) {
+	      _didIteratorError = true;
+	      _iteratorError = err;
+	    } finally {
+	      try {
+	        if (!_iteratorNormalCompletion && _iterator.return) {
+	          _iterator.return();
+	        }
+	      } finally {
+	        if (_didIteratorError) {
+	          throw _iteratorError;
+	        }
+	      }
+	    }
+	  };
+
+	  test4(1, 2, 3, 4, 5, 'a', [2, 3]);
+	}
+
+	{
+	  var _console;
+
+	  // 把数组拆成离散的值
+	  (_console = console).log.apply(_console, [1, 2, 4]);
+	}
+
+	{
+	  // 箭头函数 arrow函数名，v参数（没有参数时用一个空的圆括号），v*2函数体，函数返回至
+	  var arrow = function arrow(v) {
+	    return v * 2;
+	  };
+	  console.log('arrow', arrow(3));
+
+	  var arrow2 = function arrow2() {
+	    return 5;
+	  };
+	  console.log('arrow2', arrow2());
+	}
+
+	{
+	  // 尾调用 函数的最后一句话是不是一个函数  提升性能
+	  var tail = function tail(x) {
+	    console.log('tail', x);
+	  };
+
+	  var fx = function fx(x) {
+	    return tail(x); // 尾调用 
+	  };
+
+	  fx(123);
 	}
 
 /***/ })

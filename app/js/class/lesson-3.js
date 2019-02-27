@@ -48,4 +48,5 @@
 
   console.log('test',/𠮷{2}/.test('𠮷𠮷'))
   console.log('test',/𠮷{2}/u.test('𠮷𠮷'))
+
 }
