@@ -1,4 +1,5 @@
 {
   "presets":["es2015"],
+  // decorators用，装饰器
   "plugins":["transform-decorators-legacy"]
 }
